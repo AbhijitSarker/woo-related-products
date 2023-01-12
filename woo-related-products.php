@@ -19,18 +19,21 @@ if (!defined('ABSPATH')) {
     die;
 }
 
+
+define("PLUGINS_DIR", plugin_dir_path(__FILE__));
+define("PLUGINS_PATH_ASSETS", plugin_dir_url(__FILE__) . 'assets/');
+define("PLUGINS_DIR_IMG", plugin_dir_url(__FILE__) . 'assets/img/');
+
 add_action('wp_enqueue_scripts', 'rel_pro_enqueue_files');
 
 function rel_pro_enqueue_files()
 {
-    $dir = plugin_dir_url(__FILE__);
 
-    wp_enqueue_style('stylesheet', $dir . 'js/related-product-slider.css');
-    wp_enqueue_style('animate', $dir . 'js/animate.css');
+    wp_enqueue_style('product-slider', PLUGINS_PATH_ASSETS . 'css/related-product-slider.css');
+    wp_enqueue_style('animate', PLUGINS_PATH_ASSETS . 'css/animate.css');
 
-    wp_enqueue_script('scriptjs', $dir . 'js/jquery.min.js');
-    wp_enqueue_script('relatedpro', $dir . 'js/related-product-slider.min.js');
-    wp_enqueue_script('main', $dir . 'js/main.js');
+    wp_enqueue_script('relatedpro', PLUGINS_PATH_ASSETS . 'js/related-product-slider.min.js', array('jquery'), false, true);
+    wp_enqueue_script('script', PLUGINS_PATH_ASSETS . 'js/script.js', array('jquery'), false, true);
 }
 
 
@@ -44,53 +47,7 @@ function woocommerce_output_related_products()
 add_action('woocommerce_after_single_product_summary', 'rel_pro_ralated_product', 999);
 function rel_pro_ralated_product()
 {
-    global $product;
-
-?>
-    <div class="mx-product-slider">
-
-        <!-- first slide -->
-        <div>
-
-            <!-- main image -->
-            <img src="1.jpg" alt="" />
-
-            <!-- banner -->
-            <div class="mx-slide-banner">
-                <a href="#">
-                    <img src="banner-1.png" alt="">
-                </a>
-            </div>
-
-            <!-- Related productss slider -->
-            <ul class="mx-related-products">
-
-                <!-- product 1 -->
-                <li>
-                    <a href="#">
-                        <span class="mx-price">$7.90</span> <img src="product1.png" alt="" />
-                    </a>
-                </li>
-
-                <!-- product 2 -->
-                <li>
-                    <a href="#">
-                        <span class="mx-price">$7.90</span> <img src="product1.png" alt="" />
-                    </a>
-                </li>
-
-                <!-- product 3 ... -->
-
-            </ul>
-
-        </div>
-
-        <!-- next slide ... -->
-
-    </div>
-
-<?php
-
+    require(PLUGINS_DIR . '/views/slider-template.php');
 }
 
 
